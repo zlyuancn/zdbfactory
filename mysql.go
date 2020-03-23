@@ -21,7 +21,7 @@ type mysqlFactory int
 
 var _ IDBFactory = (*mysqlFactory)(nil)
 
-type MysqlDBConfig struct {
+type MysqlConfig struct {
     Host        string // 主机地址
     DBName      string // 库名
     UserName    string // 用户名
@@ -32,16 +32,16 @@ type MysqlDBConfig struct {
 }
 
 func (mysqlFactory) ParseTomlShard(shard *toml.Tree) (interface{}, error) {
-    a := new(MysqlDBConfig)
+    a := new(MysqlConfig)
     if err := shard.Unmarshal(a); err != nil {
         return nil, err
     }
     return a, nil
 }
 func (mysqlFactory) Connect(config interface{}) (interface{}, error) {
-    conf, ok := config.(*MysqlDBConfig)
+    conf, ok := config.(*MysqlConfig)
     if !ok {
-        return nil, zerrors.NewSimple("非*MysqlDBConfig结构")
+        return nil, zerrors.NewSimple("非*MysqlConfig结构")
     }
     if conf == nil {
         return nil, zerrors.NewSimple("配置的值是空的")
@@ -84,7 +84,7 @@ func GetMysql(dbname string) (*gorm.DB, error) {
     if a == nil {
         return nil, zerrors.NewSimplef("不存在的dbname<%s>", dbname)
     }
-    if a.Type() != DBMysql {
+    if a.Type() != Mysql {
         return nil, zerrors.NewSimplef("db实例<%s>是<%v>类型", dbname, a.dbtype)
     }
 

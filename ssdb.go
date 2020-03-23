@@ -76,7 +76,7 @@ func GetSsdb(dbname string) (*gossdb.Connectors, error) {
     if a == nil {
         return nil, zerrors.NewSimplef("不存在的dbname<%s>", dbname)
     }
-    if a.Type() != DBSSDB {
+    if a.Type() != SSDB {
         return nil, zerrors.NewSimplef("db实例<%s>是<%v>类型", dbname, a.dbtype)
     }
 

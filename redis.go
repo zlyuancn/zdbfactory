@@ -21,7 +21,7 @@ type redisFactory int
 var _ IDBFactory = (*redisFactory)(nil)
 
 type RedisConfig struct {
-    Address      []string
+    Address      []string // [host1:port1, host2:port2]
     Password     string
     DB           int
     IsCluster    bool
@@ -95,7 +95,7 @@ func GetRedis(dbname string) (redis.UniversalClient, error) {
     if a == nil {
         return nil, zerrors.NewSimplef("不存在的dbname<%s>", dbname)
     }
-    if a.Type() != DBRedis {
+    if a.Type() != Redis {
         return nil, zerrors.NewSimplef("db实例<%s>是<%v>类型", dbname, a.dbtype)
     }
 

@@ -20,7 +20,7 @@ type mongoFactory int
 
 var _ IDBFactory = (*mongoFactory)(nil)
 
-type MongoDBConfig struct {
+type MongoConfig struct {
     Address       []string // 连接地址, 如: 127.0.0.1:27017
     DBName        string   // 库名
     UserName      string   // 用户名
@@ -33,16 +33,16 @@ type MongoDBConfig struct {
 }
 
 func (mongoFactory) ParseTomlShard(shard *toml.Tree) (interface{}, error) {
-    a := new(MongoDBConfig)
+    a := new(MongoConfig)
     if err := shard.Unmarshal(a); err != nil {
         return nil, err
     }
     return a, nil
 }
 func (mongoFactory) Connect(config interface{}) (interface{}, error) {
-    conf, ok := config.(*MongoDBConfig)
+    conf, ok := config.(*MongoConfig)
     if !ok {
-        return nil, zerrors.NewSimple("非*MongoDBConfig结构")
+        return nil, zerrors.NewSimple("非*MongoConfig结构")
     }
     if conf == nil {
         return nil, zerrors.NewSimple("配置的值是空的")
@@ -85,7 +85,7 @@ func GetMongo(dbname string) (*zmongo.Client, error) {
     if a == nil {
         return nil, zerrors.NewSimplef("不存在的dbname<%s>", dbname)
     }
-    if a.Type() != DBMongoDB {
+    if a.Type() != Mongo {
         return nil, zerrors.NewSimplef("db实例<%s>是<%v>类型", dbname, a.dbtype)
     }
 

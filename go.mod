@@ -9,9 +9,7 @@ require (
 	github.com/coreos/go-systemd v0.0.0-20191104093116-d3cd4ed1dbcf // indirect
 	github.com/coreos/pkg v0.0.0-20180928190104-399ea9e2e55f // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
-	github.com/fortytw2/leaktest v1.3.0 // indirect
 	github.com/go-redis/redis v6.15.7+incompatible
-	github.com/go-sql-driver/mysql v1.5.0 // indirect
 	github.com/gogo/protobuf v1.3.1 // indirect
 	github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e // indirect
 	github.com/golang/protobuf v1.3.4 // indirect
@@ -24,12 +22,11 @@ require (
 	github.com/jinzhu/gorm v1.9.12
 	github.com/jonboulle/clockwork v0.1.0 // indirect
 	github.com/klauspost/compress v1.10.2 // indirect
-	github.com/mailru/easyjson v0.7.1 // indirect
 	github.com/olivere/elastic v6.2.28+incompatible // indirect
+	github.com/olivere/elastic/v7 v7.0.12
 	github.com/onsi/ginkgo v1.12.0 // indirect
 	github.com/onsi/gomega v1.9.0 // indirect
 	github.com/pelletier/go-toml v1.6.0
-	github.com/pkg/errors v0.9.1 // indirect
 	github.com/prometheus/client_golang v1.5.0 // indirect
 	github.com/prometheus/procfs v0.0.10 // indirect
 	github.com/seefan/gossdb v1.1.2

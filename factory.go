@@ -21,12 +21,13 @@ type DBType string
 
 // 支持的db类型
 const (
-    DBMongoDB DBType = "mongo"
-    DBRedis          = "redis"
-    DBESv6           = "esv6"
-    DBMysql          = "mysql"
-    DBSSDB           = "ssdb"
-    DBETCD           = "etcd"
+    Mongo DBType = "mongo"
+    Redis        = "redis"
+    ESv6         = "esv6"
+    ESv7         = "esv7"
+    Mysql        = "mysql"
+    SSDB         = "ssdb"
+    ETCD         = "etcd"
 )
 
 // 解析toml树中以DBPrefix开头的分片
@@ -63,12 +64,13 @@ type IDBFactory interface {
 }
 
 var factoryStorage = map[DBType]IDBFactory{
-    DBMongoDB: new(mongoFactory),
-    DBRedis:   new(redisFactory),
-    DBESv6:    new(esv6Factory),
-    DBMysql:   new(mysqlFactory),
-    DBSSDB:    new(ssdbFactory),
-    DBETCD:    new(etcdFactory),
+    Mongo: new(mongoFactory),
+    Redis: new(redisFactory),
+    ESv6:  new(esv6Factory),
+    ESv7:  new(esv7Factory),
+    Mysql: new(mysqlFactory),
+    SSDB:  new(ssdbFactory),
+    ETCD:  new(etcdFactory),
 }
 
 type DBFactory struct {

@@ -78,7 +78,7 @@ func GetEtcd(dbname string) (*clientv3.Client, error) {
     if a == nil {
         return nil, zerrors.NewSimplef("不存在的dbname<%s>", dbname)
     }
-    if a.Type() != DBETCD {
+    if a.Type() != ETCD {
         return nil, zerrors.NewSimplef("db实例<%s>是<%v>类型", dbname, a.dbtype)
     }
 

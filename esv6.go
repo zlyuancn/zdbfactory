@@ -9,6 +9,9 @@
 package zdbfactory
 
 import (
+    "context"
+    "time"
+
     "github.com/pelletier/go-toml"
     "github.com/zlyuancn/zerrors"
     "gopkg.in/olivere/elastic.v6"
@@ -19,7 +22,15 @@ type esv6Factory int
 var _ IDBFactory = (*esv6Factory)(nil)
 
 type ESv6Config struct {
-    Address []string // 地址
+    Address       []string // 地址
+    UserName      string   // 用户名
+    Password      string   // 密码
+    DialTimeout   int64    // 连接超时(毫秒
+    Sniff         bool     // 嗅探器
+    Healthcheck   bool     // 心跳检查
+    Retry         int      // 重试次数
+    RetryInterval int      // 重试间隔(毫秒)
+    GZip          bool     // 启用gzip压缩
 }
 
 func (esv6Factory) ParseTomlShard(shard *toml.Tree) (interface{}, error) {
@@ -38,10 +49,29 @@ func (esv6Factory) Connect(config interface{}) (interface{}, error) {
         return nil, zerrors.NewSimple("配置的值是空的")
     }
 
-    c, err := elastic.NewClient(
-        elastic.SetSniff(false),
+    opts := []elastic.ClientOptionFunc{
+        elastic.SetSniff(conf.Sniff),
         elastic.SetURL(conf.Address...),
-    )
+        elastic.SetHealthcheck(conf.Healthcheck),
+        elastic.SetGzip(conf.GZip),
+    }
+    if conf.UserName != "" || conf.Password != "" {
+        opts = append(opts, elastic.SetBasicAuth(conf.UserName, conf.Password))
+    }
+    if conf.Retry > 0 {
+        ticks := make([]int, conf.Retry)
+        for i := 0; i < conf.Retry; i++ {
+            ticks[i] = conf.RetryInterval
+        }
+        elastic.SetRetrier(elastic.NewBackoffRetrier(elastic.NewSimpleBackoff(ticks...)))
+    }
+
+    ctx := context.Background()
+    if conf.DialTimeout > 0 {
+        ctx, _ = context.WithTimeout(ctx, time.Duration(conf.DialTimeout*1e6))
+    }
+
+    c, err := elastic.DialContext(ctx, opts...)
     if err != nil {
         return nil, zerrors.WrapSimple(err, "连接失败")
     }
@@ -64,7 +94,7 @@ func GetESv6(dbname string) (*elastic.Client, error) {
     if a == nil {
         return nil, zerrors.NewSimplef("不存在的dbname<%s>", dbname)
     }
-    if a.Type() != DBESv6 {
+    if a.Type() != ESv6 {
         return nil, zerrors.NewSimplef("db实例<%s>是<%v>类型", dbname, a.dbtype)
     }
 
