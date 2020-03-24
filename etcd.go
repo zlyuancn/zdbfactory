@@ -74,6 +74,11 @@ func (etcdFactory) Close(dbinstance interface{}) error {
     return c.Close()
 }
 
+// 添加etcd配置
+func AddEtcdConfig(dbname string, conf *EtcdConfig) {
+    AddDBConfig(dbname, ETCD, conf)
+}
+
 // 获取etcd实例
 func GetEtcd(dbname string) (*clientv3.Client, error) {
     a := defaultDBFactory.GetDBInstance(dbname)

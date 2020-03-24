@@ -90,6 +90,11 @@ func (esv7Factory) Close(dbinstance interface{}) error {
     return nil
 }
 
+// 添加esv7配置
+func AddEsv7Config(dbname string, conf *ESv7Config) {
+    AddDBConfig(dbname, ESv7, conf)
+}
+
 // 获取esv7db实例
 func GetESv7(dbname string) (*elastic.Client, error) {
     a := defaultDBFactory.GetDBInstance(dbname)

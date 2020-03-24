@@ -80,6 +80,11 @@ func (mysqlFactory) Close(dbinstance interface{}) error {
     return c.Close()
 }
 
+// 添加mysql配置
+func AddMysqlConfig(dbname string, conf *MysqlConfig) {
+    AddDBConfig(dbname, Mysql, conf)
+}
+
 // 获取mysql实例
 func GetMysql(dbname string) (*gorm.DB, error) {
     a := defaultDBFactory.GetDBInstance(dbname)

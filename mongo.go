@@ -81,6 +81,11 @@ func (mongoFactory) Close(dbinstance interface{}) error {
     return c.Close()
 }
 
+// 添加mongo配置
+func AddMongoConfig(dbname string, conf *MongoConfig) {
+    AddDBConfig(dbname, Mongo, conf)
+}
+
 // 获取mongodb实例
 func GetMongo(dbname string) (*zmongo.Client, error) {
     a := defaultDBFactory.GetDBInstance(dbname)

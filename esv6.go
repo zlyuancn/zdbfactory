@@ -90,6 +90,11 @@ func (esv6Factory) Close(dbinstance interface{}) error {
     return nil
 }
 
+// 添加esv6配置
+func AddEsv6Config(dbname string, conf *ESv6Config) {
+    AddDBConfig(dbname, ESv6, conf)
+}
+
 // 获取esv6db实例
 func GetESv6(dbname string) (*elastic.Client, error) {
     a := defaultDBFactory.GetDBInstance(dbname)

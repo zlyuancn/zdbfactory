@@ -91,6 +91,11 @@ func (redisFactory) Close(dbinstance interface{}) error {
     return c.Close()
 }
 
+// 添加redis配置
+func AddRedisConfig(dbname string, conf *RedisConfig) {
+    AddDBConfig(dbname, Redis, conf)
+}
+
 // 获取redisdb实例
 func GetRedis(dbname string) (redis.UniversalClient, error) {
     a := defaultDBFactory.GetDBInstance(dbname)

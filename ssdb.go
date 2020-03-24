@@ -72,6 +72,11 @@ func (ssdbFactory) Close(dbinstance interface{}) error {
     return nil
 }
 
+// 添加ssdb配置
+func AddSsdbConfig(dbname string, conf *SsdbConfig) {
+    AddDBConfig(dbname, SSDB, conf)
+}
+
 // 获取ssdb实例
 func GetSsdb(dbname string) (*gossdb.Connectors, error) {
     a := defaultDBFactory.GetDBInstance(dbname)
