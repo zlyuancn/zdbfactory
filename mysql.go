@@ -39,12 +39,14 @@ func (mysqlFactory) ParseTomlShard(shard *toml.Tree) (interface{}, error) {
     return a, nil
 }
 func (mysqlFactory) Connect(config interface{}) (interface{}, error) {
-    conf, ok := config.(*MysqlConfig)
-    if !ok {
+    var conf *MysqlConfig
+    switch c := config.(type) {
+    case *MysqlConfig:
+        conf = c
+    case MysqlConfig:
+        conf = &c
+    default:
         return nil, zerrors.NewSimple("非*MysqlConfig结构")
-    }
-    if conf == nil {
-        return nil, zerrors.NewSimple("配置的值是空的")
     }
 
     dbsource := fmt.Sprintf("%s:%s@tcp(%s)/%s",

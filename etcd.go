@@ -37,12 +37,14 @@ func (etcdFactory) ParseTomlShard(shard *toml.Tree) (interface{}, error) {
     return a, nil
 }
 func (etcdFactory) Connect(config interface{}) (interface{}, error) {
-    conf, ok := config.(*EtcdConfig)
-    if !ok {
+    var conf *EtcdConfig
+    switch c := config.(type) {
+    case *EtcdConfig:
+        conf = c
+    case EtcdConfig:
+        conf = &c
+    default:
         return nil, zerrors.NewSimple("非*EtcdConfig结构")
-    }
-    if conf == nil {
-        return nil, zerrors.NewSimple("配置的值是空的")
     }
 
     c, err := clientv3.New(clientv3.Config{

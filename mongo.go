@@ -40,12 +40,14 @@ func (mongoFactory) ParseTomlShard(shard *toml.Tree) (interface{}, error) {
     return a, nil
 }
 func (mongoFactory) Connect(config interface{}) (interface{}, error) {
-    conf, ok := config.(*MongoConfig)
-    if !ok {
+    var conf *MongoConfig
+    switch c := config.(type) {
+    case *MongoConfig:
+        conf = c
+    case MongoConfig:
+        conf = &c
+    default:
         return nil, zerrors.NewSimple("非*MongoConfig结构")
-    }
-    if conf == nil {
-        return nil, zerrors.NewSimple("配置的值是空的")
     }
 
     c, err := zmongo.New(&zmongo.Config{

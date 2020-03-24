@@ -41,12 +41,14 @@ func (esv7Factory) ParseTomlShard(shard *toml.Tree) (interface{}, error) {
     return a, nil
 }
 func (esv7Factory) Connect(config interface{}) (interface{}, error) {
-    conf, ok := config.(*ESv7Config)
-    if !ok {
+    var conf *ESv7Config
+    switch c := config.(type) {
+    case *ESv7Config:
+        conf = c
+    case ESv7Config:
+        conf = &c
+    default:
         return nil, zerrors.NewSimple("非*ESv7Config结构")
-    }
-    if conf == nil {
-        return nil, zerrors.NewSimple("配置的值是空的")
     }
 
     opts := []elastic.ClientOptionFunc{
