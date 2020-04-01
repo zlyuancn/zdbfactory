@@ -7,20 +7,13 @@ require (
 	github.com/coreos/etcd v3.3.18+incompatible // indirect
 	github.com/coreos/go-semver v0.3.0 // indirect
 	github.com/coreos/go-systemd v0.0.0-20191104093116-d3cd4ed1dbcf // indirect
-	github.com/coreos/pkg v0.0.0-20180928190104-399ea9e2e55f // indirect
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/go-redis/redis v6.15.7+incompatible
 	github.com/gogo/protobuf v1.3.1 // indirect
 	github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e // indirect
 	github.com/golang/protobuf v1.3.4 // indirect
-	github.com/google/btree v1.0.0 // indirect
 	github.com/google/uuid v1.1.1 // indirect
 	github.com/gorilla/websocket v1.4.1 // indirect
-	github.com/grpc-ecosystem/go-grpc-middleware v1.0.0 // indirect
-	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0 // indirect
-	github.com/grpc-ecosystem/grpc-gateway v1.9.0 // indirect
 	github.com/jinzhu/gorm v1.9.12
-	github.com/jonboulle/clockwork v0.1.0 // indirect
 	github.com/klauspost/compress v1.10.2 // indirect
 	github.com/olivere/elastic v6.2.28+incompatible // indirect
 	github.com/olivere/elastic/v7 v7.0.12
@@ -30,9 +23,7 @@ require (
 	github.com/prometheus/client_golang v1.5.0 // indirect
 	github.com/prometheus/procfs v0.0.10 // indirect
 	github.com/seefan/gossdb v1.1.2
-	github.com/soheilhy/cmux v0.1.4 // indirect
-	github.com/tmc/grpc-websocket-proxy v0.0.0-20190109142713-0ad062ec5ee5 // indirect
-	github.com/xiang90/probing v0.0.0-20190116061207-43a291ad63a2 // indirect
+	github.com/spf13/viper v1.6.2
 	github.com/zlyuancn/zerrors v0.0.0-20200117071834-1e03d7b03fbf
 	github.com/zlyuancn/zmongo v0.0.0-20200202133611-6420b6793076
 	github.com/zlyuancn/zsignal v0.0.0-20200102070656-631fe600ecd4

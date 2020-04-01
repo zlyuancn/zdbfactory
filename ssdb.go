@@ -9,7 +9,6 @@
 package zdbfactory
 
 import (
-    "github.com/pelletier/go-toml"
     "github.com/seefan/gossdb"
     ssdbconf "github.com/seefan/gossdb/conf"
     "github.com/zlyuancn/zerrors"
@@ -29,13 +28,10 @@ type SsdbConfig struct {
     RetryEnabled     bool // 是否启用重试，设置为true时，如果请求失败会再重试一次
 }
 
-func (ssdbFactory) ParseTomlShard(shard *toml.Tree) (interface{}, error) {
-    a := new(SsdbConfig)
-    if err := shard.Unmarshal(a); err != nil {
-        return nil, err
-    }
-    return a, nil
+func (ssdbFactory) MakeEmptyConfig() interface{} {
+    return new(SsdbConfig)
 }
+
 func (ssdbFactory) Connect(config interface{}) (interface{}, error) {
     var conf *SsdbConfig
     switch c := config.(type) {

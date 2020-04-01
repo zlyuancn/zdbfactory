@@ -13,6 +13,7 @@ import (
     "sync"
 
     "github.com/pelletier/go-toml"
+    "github.com/spf13/viper"
     "github.com/zlyuancn/zerrors"
     "github.com/zlyuancn/zsignal"
 )
@@ -58,7 +59,8 @@ type dbConfig struct {
 }
 
 type IDBFactory interface {
-    ParseTomlShard(shard *toml.Tree) (config interface{}, err error)
+    // 构建一个空的配置结构, 返回值必须是一个指针
+    MakeEmptyConfig() interface{}
     Connect(config interface{}) (c interface{}, err error)
     Close(dbinstance interface{}) error
 }
@@ -96,6 +98,50 @@ func New(opts ...Options) *DBFactory {
     }
 
     return factory
+}
+
+// 添加viper文件
+func (m *DBFactory) AddViperFile(file, filetype string) error {
+    v := viper.New()
+    v.SetConfigFile(file)
+    if filetype != "" {
+        v.SetConfigType(filetype)
+    }
+    if err := v.ReadInConfig(); err != nil {
+        return err
+    }
+    return m.AddViperTree(v)
+}
+
+// 添加viper树
+func (m *DBFactory) AddViperTree(tree *viper.Viper) error {
+    for key, shard := range tree.AllSettings() {
+        if !strings.HasPrefix(key, DBPrefix) {
+            continue
+        }
+
+        switch mm := shard.(type) {
+        case map[string]interface{}:
+            dbname := key[len(DBPrefix):]
+
+            switch dbtype := mm[DBTypeField].(type) {
+            case string:
+                if dbtype == "" {
+                    return zerrors.NewSimplef("<%s>错误, %s为空", dbname, DBTypeField)
+                }
+
+                config := m.mustGetFactory(DBType(dbtype)).MakeEmptyConfig()
+                if err := tree.UnmarshalKey(key, config); err != nil {
+                    return zerrors.WrapSimple(err, "配置结构解析失败")
+                }
+
+                m.AddDBConfig(dbname, DBType(dbtype), config)
+            default:
+                return zerrors.NewSimplef("<%s>错误, %s必须存在且为string类型", dbname, DBTypeField)
+            }
+        }
+    }
+    return nil
 }
 
 // 添加toml文件, 重复的db名会被替换掉
@@ -136,8 +182,8 @@ func (m *DBFactory) AddTomlShard(dbname string, shard *toml.Tree) error {
             return zerrors.NewSimplef("<%s>错误, %s为空", dbname, DBTypeField)
         }
 
-        config, err := m.parseTomlShard(DBType(dbtype), shard)
-        if err != nil {
+        config := m.mustGetFactory(DBType(dbtype)).MakeEmptyConfig()
+        if err := shard.Unmarshal(config); err != nil {
             return err
         }
 
@@ -226,9 +272,6 @@ func (m *DBFactory) mustGetFactory(dbtype DBType) IDBFactory {
     panic(zerrors.NewSimplef("不支持的db类型<%v>", dbtype))
 }
 
-func (m *DBFactory) parseTomlShard(dbtype DBType, shard *toml.Tree) (interface{}, error) {
-    return m.mustGetFactory(dbtype).ParseTomlShard(shard)
-}
 func (m *DBFactory) connectDB(conf *dbConfig) (interface{}, error) {
     return m.mustGetFactory(conf.dbtype).Connect(conf.config)
 }

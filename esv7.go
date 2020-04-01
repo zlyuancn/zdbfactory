@@ -13,7 +13,6 @@ import (
     "time"
 
     "github.com/olivere/elastic/v7"
-    "github.com/pelletier/go-toml"
     "github.com/zlyuancn/zerrors"
 )
 
@@ -33,13 +32,10 @@ type ESv7Config struct {
     GZip          bool     // 启用gzip压缩
 }
 
-func (esv7Factory) ParseTomlShard(shard *toml.Tree) (interface{}, error) {
-    a := new(ESv7Config)
-    if err := shard.Unmarshal(a); err != nil {
-        return nil, err
-    }
-    return a, nil
+func (esv7Factory) MakeEmptyConfig() interface{} {
+    return new(ESv7Config)
 }
+
 func (esv7Factory) Connect(config interface{}) (interface{}, error) {
     var conf *ESv7Config
     switch c := config.(type) {

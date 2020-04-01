@@ -12,7 +12,6 @@ import (
     "time"
 
     "github.com/go-redis/redis"
-    "github.com/pelletier/go-toml"
     "github.com/zlyuancn/zerrors"
 )
 
@@ -32,13 +31,10 @@ type RedisConfig struct {
     Ping         bool  // 开始连接时是否ping确认连接情况
 }
 
-func (redisFactory) ParseTomlShard(shard *toml.Tree) (interface{}, error) {
-    a := new(RedisConfig)
-    if err := shard.Unmarshal(a); err != nil {
-        return nil, err
-    }
-    return a, nil
+func (redisFactory) MakeEmptyConfig() interface{} {
+    return new(RedisConfig)
 }
+
 func (redisFactory) Connect(config interface{}) (interface{}, error) {
     var conf *RedisConfig
     switch c := config.(type) {

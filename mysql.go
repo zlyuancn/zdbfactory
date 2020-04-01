@@ -13,7 +13,6 @@ import (
 
     "github.com/jinzhu/gorm"
     _ "github.com/jinzhu/gorm/dialects/mysql"
-    "github.com/pelletier/go-toml"
     "github.com/zlyuancn/zerrors"
 )
 
@@ -31,13 +30,10 @@ type MysqlConfig struct {
     Ping        bool   // 开始连接时是否ping确认连接情况
 }
 
-func (mysqlFactory) ParseTomlShard(shard *toml.Tree) (interface{}, error) {
-    a := new(MysqlConfig)
-    if err := shard.Unmarshal(a); err != nil {
-        return nil, err
-    }
-    return a, nil
+func (mysqlFactory) MakeEmptyConfig() interface{} {
+    return new(MysqlConfig)
 }
+
 func (mysqlFactory) Connect(config interface{}) (interface{}, error) {
     var conf *MysqlConfig
     switch c := config.(type) {

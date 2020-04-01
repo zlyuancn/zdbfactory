@@ -11,7 +11,6 @@ package zdbfactory
 import (
     "time"
 
-    "github.com/pelletier/go-toml"
     "github.com/zlyuancn/zerrors"
     "github.com/zlyuancn/zmongo"
 )
@@ -32,13 +31,10 @@ type MongoConfig struct {
     Ping          bool     // 开始连接时是否ping确认连接情况
 }
 
-func (mongoFactory) ParseTomlShard(shard *toml.Tree) (interface{}, error) {
-    a := new(MongoConfig)
-    if err := shard.Unmarshal(a); err != nil {
-        return nil, err
-    }
-    return a, nil
+func (mongoFactory) MakeEmptyConfig() interface{} {
+    return new(MongoConfig)
 }
+
 func (mongoFactory) Connect(config interface{}) (interface{}, error) {
     var conf *MongoConfig
     switch c := config.(type) {

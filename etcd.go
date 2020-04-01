@@ -12,7 +12,6 @@ import (
     "context"
     "time"
 
-    "github.com/pelletier/go-toml"
     "github.com/zlyuancn/zerrors"
     "go.etcd.io/etcd/clientv3"
 )
@@ -29,13 +28,10 @@ type EtcdConfig struct {
     Ping        bool   // 开始连接时是否ping确认连接情况
 }
 
-func (etcdFactory) ParseTomlShard(shard *toml.Tree) (interface{}, error) {
-    a := new(EtcdConfig)
-    if err := shard.Unmarshal(a); err != nil {
-        return nil, err
-    }
-    return a, nil
+func (etcdFactory) MakeEmptyConfig() interface{} {
+    return new(EtcdConfig)
 }
+
 func (etcdFactory) Connect(config interface{}) (interface{}, error) {
     var conf *EtcdConfig
     switch c := config.(type) {

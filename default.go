@@ -10,9 +10,20 @@ package zdbfactory
 
 import (
     "github.com/pelletier/go-toml"
+    "github.com/spf13/viper"
 )
 
 var defaultDBFactory = New(WithAutoCloseDB())
+
+// 添加viper文件
+func AddViperFile(file, filetype string) error {
+    return defaultDBFactory.AddViperFile(file, filetype)
+}
+
+// 添加viper树
+func AddViperTree(tree *viper.Viper) error {
+    return defaultDBFactory.AddViperTree(tree)
+}
 
 // 添加toml文件, 重复的db名会被替换掉
 func AddTomlFile(file string) error {
