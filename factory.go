@@ -31,8 +31,8 @@ const (
     ETCD         = "etcd"
 )
 
-// 解析toml树中以DBPrefix开头的分片
-const DBPrefix = "db_"
+// 解析配置树中以DBPrefix开头的分片
+const DBPrefix = "zdb_"
 
 // 这个字段表示db类型, 它必须在toml分片中存在
 const DBTypeField = "dbtype"
