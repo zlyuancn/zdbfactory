@@ -9,6 +9,7 @@
 package zdbfactory
 
 import (
+    "fmt"
     "strings"
     "sync"
 
@@ -238,7 +239,7 @@ func (m *DBFactory) ConnectAllDB() error {
         instance, err := m.connectDB(conf)
         if err != nil {
             m.mx.Unlock()
-            return err
+            return fmt.Errorf("%s, %s", dbname, err)
         }
 
         m.storage[dbname] = &DBInstance{dbtype: conf.dbtype, instance: instance}
