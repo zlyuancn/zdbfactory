@@ -57,7 +57,7 @@ func (redisFactory) Connect(config interface{}) (interface{}, error) {
             DialTimeout:  time.Duration(conf.DialTimeout * 1e6),
         })
     } else {
-        if len(conf.Address) < 0 {
+        if len(conf.Address) < 1 {
             return nil, zerrors.NewSimple("请检查redis配置的address")
         }
         c = redis.NewClient(&redis.Options{
