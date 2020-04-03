@@ -131,6 +131,7 @@ func (m *DBFactory) AddViperTree(tree *viper.Viper) error {
                     return zerrors.NewSimplef("<%s>错误, %s为空", dbname, DBTypeField)
                 }
 
+                dbtype = strings.ToLower(dbtype)
                 config := m.mustGetFactory(DBType(dbtype)).MakeEmptyConfig()
                 if err := tree.UnmarshalKey(key, config); err != nil {
                     return zerrors.WrapSimple(err, "配置结构解析失败")
@@ -177,12 +178,15 @@ func (m *DBFactory) AddTomlShard(dbname string, shard *toml.Tree) error {
         return zerrors.NewSimple("dbname为空")
     }
 
+    dbname = strings.ToLower(dbname)
+
     switch dbtype := shard.Get(DBTypeField).(type) {
     case string:
         if dbtype == "" {
             return zerrors.NewSimplef("<%s>错误, %s为空", dbname, DBTypeField)
         }
 
+        dbtype = strings.ToLower(dbtype)
         config := m.mustGetFactory(DBType(dbtype)).MakeEmptyConfig()
         if err := shard.Unmarshal(config); err != nil {
             return err
@@ -197,6 +201,8 @@ func (m *DBFactory) AddTomlShard(dbname string, shard *toml.Tree) error {
 
 // 添加db配置, 重复的db名会被替换掉
 func (m *DBFactory) AddDBConfig(dbname string, dbtype DBType, config interface{}) {
+    dbname = strings.ToLower(dbname)
+
     m.mx.Lock()
 
     // 关闭之前的连接
@@ -216,6 +222,8 @@ func (m *DBFactory) AddDBConfig(dbname string, dbtype DBType, config interface{}
 
 // 移除db, 移除之前会关闭连接
 func (m *DBFactory) RemoveDB(dbname string) {
+    dbname = strings.ToLower(dbname)
+
     m.mx.Lock()
 
     if instance, ok := m.storage[dbname]; ok {
@@ -260,6 +268,8 @@ func (m *DBFactory) CloseAllDb() {
 
 // 获取db实例, 不存在会返回nil
 func (m *DBFactory) GetDBInstance(dbname string) *DBInstance {
+    dbname = strings.ToLower(dbname)
+
     m.mx.RLock()
     out := m.storage[dbname]
     m.mx.RUnlock()
