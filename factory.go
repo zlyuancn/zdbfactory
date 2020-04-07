@@ -289,3 +289,8 @@ func (m *DBFactory) connectDB(conf *dbConfig) (interface{}, error) {
 func (m *DBFactory) closeDB(instance *DBInstance) error {
     return m.mustGetFactory(instance.dbtype).Close(instance.instance)
 }
+
+// 注册自定义factory
+func RegistryDBFactory(dbtype DBType, factory IDBFactory) {
+    factoryStorage[dbtype] = factory
+}
