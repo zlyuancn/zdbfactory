@@ -45,7 +45,7 @@ func (mysqlFactory) Connect(config interface{}) (interface{}, error) {
         return nil, zerrors.NewSimple("非*MysqlConfig结构")
     }
 
-    dbsource := fmt.Sprintf("%s:%s@tcp(%s)/%s",
+    dbsource := fmt.Sprintf("%s:%s@tcp(%s)/%s?parseTime=True",
         conf.UserName,
         conf.Password,
         conf.Host,
