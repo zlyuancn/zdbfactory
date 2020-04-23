@@ -59,3 +59,8 @@ func ConnectAllDB() error {
 func CloseAllDb() {
     defaultDBFactory.CloseAllDb()
 }
+
+// 获取db实例, 不存在会返回nil
+func GetDBInstance(dbname string) *DBInstance {
+    return defaultDBFactory.GetDBInstance(dbname)
+}
