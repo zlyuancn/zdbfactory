@@ -3,6 +3,7 @@ module github.com/zlyuancn/zdbfactory
 go 1.13
 
 require (
+	github.com/Shopify/sarama v1.26.1
 	github.com/coreos/bbolt v1.3.3 // indirect
 	github.com/coreos/etcd v3.3.18+incompatible // indirect
 	github.com/coreos/go-semver v0.3.0 // indirect

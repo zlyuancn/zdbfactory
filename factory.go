@@ -23,13 +23,14 @@ type DBType string
 
 // 支持的db类型
 const (
-    Mongo DBType = "mongo"
-    Redis        = "redis"
-    ESv6         = "esv6"
-    ESv7         = "esv7"
-    Mysql        = "mysql"
-    SSDB         = "ssdb"
-    ETCD         = "etcd"
+    Mongo         DBType = "mongo"
+    Redis                = "redis"
+    ESv6                 = "esv6"
+    ESv7                 = "esv7"
+    Mysql                = "mysql"
+    SSDB                 = "ssdb"
+    ETCD                 = "etcd"
+    KafkaProducer        = "kafka_producer"
 )
 
 // 解析配置树中以DBPrefix开头的分片
@@ -67,13 +68,14 @@ type IDBFactory interface {
 }
 
 var factoryStorage = map[DBType]IDBFactory{
-    Mongo: new(mongoFactory),
-    Redis: new(redisFactory),
-    ESv6:  new(esv6Factory),
-    ESv7:  new(esv7Factory),
-    Mysql: new(mysqlFactory),
-    SSDB:  new(ssdbFactory),
-    ETCD:  new(etcdFactory),
+    Mongo:         new(mongoFactory),
+    Redis:         new(redisFactory),
+    ESv6:          new(esv6Factory),
+    ESv7:          new(esv7Factory),
+    Mysql:         new(mysqlFactory),
+    SSDB:          new(ssdbFactory),
+    ETCD:          new(etcdFactory),
+    KafkaProducer: new(kafkaProducerFactory),
 }
 
 type DBFactory struct {
